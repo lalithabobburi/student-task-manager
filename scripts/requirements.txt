@@ -1,0 +1,7 @@
+# No external packages required — uses Python standard library only
+# Python 3.10+ required (uses match-case and type hints)
+#
+# To run:
+#   python task_report.py
+#   python task_report.py --export
+#   python task_report.py --db /path/to/taskmanager.db

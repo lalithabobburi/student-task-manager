@@ -1,0 +1,41 @@
+# ── Java / Maven ──────────────────────────────
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.db
+*.db-shm
+*.db-wal
+.mvn/wrapper/maven-wrapper.jar
+
+# ── Node / Angular ────────────────────────────
+node_modules/
+dist/
+.angular/
+*.js.map
+
+# ── Python ────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+report.txt
+
+# ── IDEs ──────────────────────────────────────
+.idea/
+.vscode/
+*.iml
+*.iws
+.DS_Store
+Thumbs.db
+
+# ── Logs ──────────────────────────────────────
+*.log
+logs/
+spring.log

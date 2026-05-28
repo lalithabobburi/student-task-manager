@@ -1,0 +1,118 @@
+<div class="task-list-page">
+
+  <!-- ── Header ── -->
+  <div class="page-header">
+    <h1>All Tasks</h1>
+    <button class="btn btn-primary" (click)="openCreate()">+ Add Task</button>
+  </div>
+
+  <!-- ── Form Modal ── -->
+  @if (showForm) {
+    <div class="modal-overlay" (click)="showForm = false">
+      <div class="modal-box card" (click)="$event.stopPropagation()">
+        <h3>{{ editingTask ? 'Edit Task' : 'New Task' }}</h3>
+        <app-task-form
+          [task]="editingTask"
+          (saved)="onTaskSaved()"
+          (cancelled)="showForm = false" />
+      </div>
+    </div>
+  }
+
+  <!-- ── Delete Confirm Modal ── -->
+  @if (deletingId !== null) {
+    <div class="modal-overlay" (click)="deletingId = null">
+      <div class="modal-box card confirm-box" (click)="$event.stopPropagation()">
+        <p>🗑️ Delete this task? This cannot be undone.</p>
+        <div class="confirm-actions">
+          <button class="btn btn-secondary" (click)="deletingId = null">Cancel</button>
+          <button class="btn btn-danger" (click)="deleteTask()">Delete</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── Filters ── -->
+  <div class="filters card">
+    <input
+      type="text"
+      placeholder="🔍  Search by title or subject…"
+      [(ngModel)]="searchKeyword"
+      (input)="applyFilters()"
+      class="search-input"
+    />
+    <select [(ngModel)]="filterStatus" (change)="applyFilters()">
+      <option value="">All Statuses</option>
+      @for (s of statusOptions; track s) {
+        <option [value]="s">{{ s }}</option>
+      }
+    </select>
+    <select [(ngModel)]="filterPriority" (change)="applyFilters()">
+      <option value="">All Priorities</option>
+      @for (p of priorityOptions; track p) {
+        <option [value]="p">{{ p }}</option>
+      }
+    </select>
+    @if (searchKeyword || filterStatus || filterPriority) {
+      <button class="btn btn-secondary btn-sm" (click)="clearFilters()">Clear</button>
+    }
+    <span class="result-count">{{ filtered.length }} task(s)</span>
+  </div>
+
+  <!-- ── Error ── -->
+  @if (error) {
+    <div class="error-banner">⚠️ {{ error }}</div>
+  }
+
+  <!-- ── Loading ── -->
+  @if (loading) {
+    <div class="loading">Loading tasks…</div>
+  }
+
+  <!-- ── Task Table ── -->
+  @if (!loading && filtered.length === 0 && !error) {
+    <div class="empty-state card">
+      <p>📭 No tasks found. Try adjusting your filters or add a new task.</p>
+    </div>
+  }
+
+  @if (!loading && filtered.length > 0) {
+    <div class="table-wrapper card">
+      <table class="task-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Subject</th>
+            <th>Deadline</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (task of filtered; track task.id; let i = $index) {
+            <tr [class.row-overdue]="task.status === 'OVERDUE'"
+                [class.row-done]="task.status === 'COMPLETED'">
+              <td class="td-num">{{ i + 1 }}</td>
+              <td class="td-title">
+                <strong>{{ task.title }}</strong>
+                @if (task.description) {
+                  <span class="desc">{{ task.description }}</span>
+                }
+              </td>
+              <td>{{ task.subject }}</td>
+              <td>{{ task.deadline | date:'mediumDate' }}</td>
+              <td><span class="badge badge-{{ task.priority.toLowerCase() }}">{{ task.priority }}</span></td>
+              <td><span class="badge badge-{{ task.status.toLowerCase() }}">{{ task.status }}</span></td>
+              <td class="td-actions">
+                <button class="btn btn-secondary btn-sm" (click)="openEdit(task)">✏️ Edit</button>
+                <button class="btn btn-danger btn-sm" (click)="confirmDelete(task.id!)">🗑️</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

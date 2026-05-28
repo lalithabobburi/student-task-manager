@@ -1,0 +1,116 @@
+<div class="dashboard">
+
+  <!-- ── Header ── -->
+  <div class="dash-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p class="sub">Welcome back! Here's your task overview.</p>
+    </div>
+    <button class="btn btn-primary" (click)="showForm = !showForm">
+      <span>+</span> Add Task
+    </button>
+  </div>
+
+  <!-- ── Quick Add Form ── -->
+  @if (showForm) {
+    <div class="form-card card">
+      <h3>New Task</h3>
+      <app-task-form (saved)="onTaskSaved()" (cancelled)="showForm = false" />
+    </div>
+  }
+
+  <!-- ── Stats Cards ── -->
+  @if (loading) {
+    <div class="loading">Loading stats…</div>
+  } @else {
+    <div class="stats-grid">
+      <div class="stat-card stat-total">
+        <div class="stat-icon">📋</div>
+        <div class="stat-body">
+          <div class="stat-value">{{ stats.total }}</div>
+          <div class="stat-label">Total Tasks</div>
+        </div>
+      </div>
+      <div class="stat-card stat-pending">
+        <div class="stat-icon">🕐</div>
+        <div class="stat-body">
+          <div class="stat-value">{{ stats.pending }}</div>
+          <div class="stat-label">Pending</div>
+        </div>
+      </div>
+      <div class="stat-card stat-progress">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-body">
+          <div class="stat-value">{{ stats.inProgress }}</div>
+          <div class="stat-label">In Progress</div>
+        </div>
+      </div>
+      <div class="stat-card stat-done">
+        <div class="stat-icon">✅</div>
+        <div class="stat-body">
+          <div class="stat-value">{{ stats.completed }}</div>
+          <div class="stat-label">Completed</div>
+        </div>
+      </div>
+      <div class="stat-card stat-overdue">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-body">
+          <div class="stat-value">{{ stats.overdue }}</div>
+          <div class="stat-label">Overdue</div>
+        </div>
+      </div>
+      <div class="stat-card stat-today">
+        <div class="stat-icon">📅</div>
+        <div class="stat-body">
+          <div class="stat-value">{{ stats.dueToday }}</div>
+          <div class="stat-label">Due Today</div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── Due Today + Recent ── -->
+  <div class="two-col">
+
+    <div class="card">
+      <div class="section-header">
+        <h2>Due Today</h2>
+        <span class="badge badge-overdue">{{ dueTodayTasks.length }}</span>
+      </div>
+      @if (dueTodayTasks.length === 0) {
+        <p class="empty-msg">🎉 Nothing due today!</p>
+      } @else {
+        <ul class="task-mini-list">
+          @for (task of dueTodayTasks; track task.id) {
+            <li class="task-mini-item">
+              <span class="task-mini-dot" [class]="'dot-' + task.priority.toLowerCase()"></span>
+              <span class="task-mini-title">{{ task.title }}</span>
+              <span class="badge badge-{{ task.status.toLowerCase() }}">{{ task.status }}</span>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+
+    <div class="card">
+      <div class="section-header">
+        <h2>Recent Tasks</h2>
+        <a routerLink="/tasks" class="view-all">View all →</a>
+      </div>
+      @if (recentTasks.length === 0) {
+        <p class="empty-msg">No tasks yet. Add one above!</p>
+      } @else {
+        <ul class="task-mini-list">
+          @for (task of recentTasks; track task.id) {
+            <li class="task-mini-item">
+              <span class="task-mini-dot" [class]="'dot-' + task.priority.toLowerCase()"></span>
+              <span class="task-mini-title">{{ task.title }}</span>
+              <span class="badge badge-{{ task.status.toLowerCase() }}">{{ task.status }}</span>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+
+  </div>
+</div>
