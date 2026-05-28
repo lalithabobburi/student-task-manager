@@ -144,7 +144,9 @@ priority    - LOW | MEDIUM | HIGH
 createdAt   - Auto timestamp
 updatedAt   - Auto timestamp
 ```
+## 👤 Author
 
+- Name:* Lalitha Bobburi
 
 ## 📄 License
 
