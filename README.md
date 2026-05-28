@@ -145,15 +145,6 @@ createdAt   - Auto timestamp
 updatedAt   - Auto timestamp
 ```
 
----
-
-## 👤 Author
-
-- **Name:** [Your Name]
-- **Role:** CGI Apprentice – Java/Support
-- **Position ID:** J0526-0365
-
----
 
 ## 📄 License
 
